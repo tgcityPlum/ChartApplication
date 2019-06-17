@@ -12,6 +12,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"
+            android:visibility="gone"
             android:text="柱形图" />
 
         <com.yzy.chartapplication.chart.YouzyBarChart
@@ -19,6 +20,7 @@
             android:layout_width="match_parent"
             android:layout_height="400dp"
             android:layout_margin="10dp"
+            android:visibility="gone"
             android:padding="20dp" />
 
         <TextView
@@ -28,7 +30,7 @@
             android:layout_marginTop="40dp"
             android:text="饼形图" />
 
-        <com.yzy.chartapplication.chart.YouzyBarChart
+        <com.yzy.chartapplication.chart.YouzyPieChart
             android:id="@+id/chart2"
             android:layout_width="match_parent"
             android:layout_height="400dp"
