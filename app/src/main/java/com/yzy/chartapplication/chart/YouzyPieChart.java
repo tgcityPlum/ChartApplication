@@ -13,10 +13,13 @@ import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
 import com.github.mikephil.charting.formatter.PercentFormatter;
 import com.github.mikephil.charting.highlight.Highlight;
+import com.github.mikephil.charting.interfaces.datasets.IDataSet;
+import com.github.mikephil.charting.interfaces.datasets.IPieDataSet;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -100,7 +103,7 @@ public class YouzyPieChart extends PieChart {
      *
      * @param pieValues 数据源
      */
-    public YouzyPieChart setData(ArrayList<PieEntry> pieValues, boolean isHighlightPerTapEnabled, int colorsType,boolean isDrawCenterText) {
+    public YouzyPieChart setData(ArrayList<PieEntry> pieValues, boolean isHighlightPerTapEnabled, int colorsType, boolean isDrawCenterText) {
         this.isHighlightPerTapEnabled = isHighlightPerTapEnabled;
         this.isDrawCenterText = isDrawCenterText;
         this.colorsType = colorsType;
@@ -158,9 +161,9 @@ public class YouzyPieChart extends PieChart {
         Legend legend = getLegend();
         if (showLegend) {
             legend.setEnabled(true);
-            legend.setHorizontalAlignment(Legend.LegendHorizontalAlignment.CENTER);
+            legend.setHorizontalAlignment(Legend.LegendHorizontalAlignment.RIGHT);
             legend.setVerticalAlignment(Legend.LegendVerticalAlignment.TOP);
-            legend.setOrientation(Legend.LegendOrientation.HORIZONTAL);
+            legend.setOrientation(Legend.LegendOrientation.VERTICAL);
             legend.setDrawInside(false);
             legend.setDirection(Legend.LegendDirection.LEFT_TO_RIGHT);
         } else {
@@ -181,7 +184,7 @@ public class YouzyPieChart extends PieChart {
         //是否绘制PieChart内部中心文本
         setDrawCenterText(isDrawCenterText);
         //设置是否绘制条目标签名称
-        setDrawEntryLabels(isDrawCenterText);
+        setDrawEntryLabels(false);
         // 设置图表点击Item高亮是否可用
         setHighlightPerTapEnabled(isHighlightPerTapEnabled);
         //设置旋转角度
@@ -216,24 +219,44 @@ public class YouzyPieChart extends PieChart {
         dataSet.setSelectionShift(5f);//设置饼块选中时偏离饼图中心的距离
 
         dataSet.setColors(colorsType == 0 ? PIE_COLORS : PIE_COLORS_1);//设置饼块的颜色
-        dataSet.setValueLinePart1OffsetPercentage(80f);//数据连接线距图形片内部边界的距离，为百分数
-        dataSet.setValueLinePart1Length(0.3f);
-        dataSet.setValueLinePart2Length(0.4f);
-        dataSet.setValueLineColor(pieDrawValuesColor);//设置连接线的颜色
+        dataSet.setValueLinePart1OffsetPercentage(100f);
+        dataSet.setValueLinePart1Length(0.6f);
+        dataSet.setValueLinePart2Length(0.2f);
+        dataSet.setHighlightEnabled(true);
         dataSet.setYValuePosition(PieDataSet.ValuePosition.OUTSIDE_SLICE);
+        dataSet.setXValuePosition(PieDataSet.ValuePosition.OUTSIDE_SLICE);//标签显示在外面，关闭显示在饼图里面
+        dataSet.setValueLineColor(0xff000000);  //设置指示线条颜色,必须设置成这样，才能和饼图区域颜色一致
+
+       /* PieData pieData = new PieData(dataSet);
+        pieData.setValueFormatter(new PercentFormatter());
+        pieData.setValueTextSize(11f);
+
+        setValueTextColor(PIE_COLORS_1, pieData.getDataSets());
+//        pieData.setValueTextColor(pieDrawValuesColor);
+
+        //是否绘制对应的数值比例
+        pieData.setDrawValues(isDrawCenterText);*/
 
         PieData pieData = new PieData(dataSet);
         pieData.setValueFormatter(new PercentFormatter());
-        pieData.setValueTextSize(11f);
-        pieData.setValueTextColor(pieDrawValuesColor);
-
-        //是否绘制对应的数值比例
-        pieData.setDrawValues(isDrawCenterText);
-
+        pieData.setValueTextSize(12f);
+        pieData.setHighlightEnabled(true);
 
         setData(pieData);
         highlightValues(null);
         invalidate();
+    }
+
+    private void setValueTextColor(int[] color, List<IPieDataSet> mDataSets) {
+        Iterator var2 = mDataSets.iterator();
+
+        int position = 0;
+        while (var2.hasNext()) {
+            IDataSet set = (IDataSet) var2.next();
+            set.setValueTextColor(color[position]);
+            position++;
+        }
+
     }
 
 }

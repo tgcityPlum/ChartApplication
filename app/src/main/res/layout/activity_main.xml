@@ -33,7 +33,7 @@
         <com.yzy.chartapplication.chart.YouzyPieChart
             android:id="@+id/chart2"
             android:layout_width="match_parent"
-            android:layout_height="400dp"
+            android:layout_height="180dp"
             android:layout_margin="10dp"
             android:padding="20dp" />
 
